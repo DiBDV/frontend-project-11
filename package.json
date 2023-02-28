@@ -3,6 +3,27 @@
     "bootstrap": "^5.3.0-alpha1"
   },
   "devDependencies": {
+    "html-webpack-plugin": "^5.5.0",
     "webpack": "^5.75.0"
-  }
+  },
+  "name": "@hexlet/code",
+  "description": "[![Actions Status](https://github.com/DiBDV/frontend-project-11/workflows/hexlet-check/badge.svg)](https://github.com/DiBDV/frontend-project-11/actions)",
+  "version": "0.1.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/DiBDV/frontend-project-11.git"
+  },
+  "keywords": [
+    "rss"
+  ],
+  "author": "DiBDV",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DiBDV/frontend-project-11/issues"
+  },
+  "homepage": "https://github.com/DiBDV/frontend-project-11#readme"
 }
