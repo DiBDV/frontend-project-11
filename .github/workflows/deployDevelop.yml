@@ -1,0 +1,12 @@
+name: "[DEV] deployment "
+    on : 
+      branch: dev
+
+    workflow_dispatch:
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - name: "Deploy to GIT"
