@@ -11,8 +11,8 @@ export default () => {
     form: {
       url: '',
       state: 'filling',
-    }
-  }
+    },
+  };
 
   const state = onChange(intitalState, () => {
 
