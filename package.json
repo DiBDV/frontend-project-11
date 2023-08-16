@@ -22,7 +22,7 @@
   "author": "Dmitrii Bedov",
   "license": "ISC",
   "dependencies": {
-    "bootstrap": "^5.3.1",
+    "bootstrap": "^5.3.0",
     "on-change": "^4.0.2"
   },
   "devDependencies": {
@@ -41,7 +41,8 @@
     "style-loader": "^3.3.3",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1"
+    "webpack-dev-server": "^4.15.1",
+    "yup": "^1.2.0"
   },
   "version": "1.0.0",
   "scripts": {

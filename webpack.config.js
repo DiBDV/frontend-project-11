@@ -9,7 +9,6 @@ const __dirname = path.dirname(__filename);
 
 const isProduction = process.env.NODE_ENV == 'production';
 
-
 const config = {
     entry: './src/index.js',
     output: {
@@ -37,8 +36,9 @@ const config = {
                 test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
                 type: 'asset',
             },
-            { 
-                test: /\.css$/, use: ['style-loader', 'css-loader', 'postcss-loader'] 
+            {
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader', 'postcss-loader']
             },
             {
                 test: /\.scss$/,
@@ -51,11 +51,12 @@ const config = {
     },
 };
 
+
 export default () => {
     if (isProduction) {
         config.mode = 'production';
-        
-        
+
+
     } else {
         config.mode = 'development';
     }
