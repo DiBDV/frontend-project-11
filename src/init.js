@@ -5,7 +5,10 @@ import Example from './Example.js';
 import onChange from 'on-change';
 
 export default () => {
-  const element = document.getElementsByClassName('form-floating');
+  const elements = {
+    searchBar: document.getElementsByClassName('form-floating'),
+    buttonAdd: document.getElementsByClassName('btn-primary'),
+  }
 
   const intitalState = {
     form: {
@@ -17,7 +20,8 @@ export default () => {
   const state = onChange(intitalState, () => {
 
   });
-  console.log('El', element)
+
+  console.log('El', elements)
   // const obj = new Example(element);
   // obj.init();
 };
