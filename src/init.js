@@ -38,20 +38,37 @@ export default () => {
   // Controller
   elements.searchBar?.addEventListener('input', (e) => {
       state.form.state = 'filling';
-      const url = state.form.url = e.target?.value;
+      const urlValue = e.target?.value;
+      state.form.url = urlValue;
+      const urlSchema = yup.string().url(urlValue);
+
       // @TODO Validate
 
-      const schema = yup.string().url(url);
-      console.log('schema', schema);
+      const validateUrl = (url) => {
+        return new Promise((resolve, reject) => {
+          urlSchema.isValid(url)
+            .then(valid => {
+              if (valid) {
+                resolve();
+              } else {
+                reject(new Error('Invalid URL'));
+              }
+            })
+            .catch(error => {
+              reject(error);
+            });
+        });
+      };
 
-      const isValidUrl = (schema) => {
-        if (schema.StringSchema = false) {
+      validateUrl(urlValue)
+        .then(() => {
+          state.form.state = 'valid';
+          console.log('URL is valid', urlValue);
+        })
+        .catch(error => {
           state.form.state = 'error'
-          console.error(schema);
-        } state.form.state = 'valid'
-      }
-
-      console.log('urlValidation', isValidUrl);
+          console.log(error.message);
+        })
 
   })
 };
