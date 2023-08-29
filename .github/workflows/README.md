@@ -26,3 +26,17 @@ make develop
 This repository is created and maintained by the team and the community of Hexlet, an educational project. [Read more about Hexlet](https://hexlet.io?utm_source=github&utm_medium=link&utm_campaign=webpack-package).
 
 See most active contributors on [hexlet-friends](https://friends.hexlet.io/).
+
+# known bugs/limitations
+
+For the case you're facing the issue, that bootstrap is throwing the error about [art-sass peprectation](https://github.com/twbs/bootstrap/issues/39028). Please user the following [workaround](https://github.com/twbs/bootstrap/pull/39030/files#diff-41667d8b9901aa9fa52483b538bb9026c287f2c663d2fdc01acffa06888cc087). The file is located in {your_project_folder/node_modules/bootstrap/scss/mixins/_grid.scss}.
+
+```
+@mixin row-cols($count) {
+  > * {
+    flex: 0 0 auto;
+    width: divide(100%, $count);
+    width: percentage(divide(1, $count));
+  }
+}
+```
