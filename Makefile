@@ -1,8 +1,14 @@
-install: 
-	npm ci
+develop:
+	npx webpack serve
 
 run:
 	bin/nodejs-package.js 10
+
+install:
+	npm ci
+
+build:
+	NODE_ENV=production npx webpack
 
 test:
 	npm test

@@ -1,16 +1,17 @@
 env:
-  browser: true
   es2021: true
   node: true
+  jest: true
 extends: 
-  - "eslint:recommended"
+  - airbnb-base
   - "plugin:jest/recommended"
   - "plugin:fp/recommended"
-overrides: []
 plugins:
   - jest
   - fp
 parserOptions:
+  ecmaFeatures:
+    jsx: true
   ecmaVersion: latest
   sourceType: module
 rules:
