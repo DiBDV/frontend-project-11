@@ -22,7 +22,6 @@ make install
 make develop
 ```
 
-
 ## known bugs/limitations
 
 For the case you're facing the issue, that bootstrap is throwing the error about [art-sass peprectation](https://github.com/twbs/bootstrap/issues/39028). Please user the following [workaround](https://github.com/twbs/bootstrap/pull/39030/files#diff-41667d8b9901aa9fa52483b538bb9026c287f2c663d2fdc01acffa06888cc087). The file is located in {your_project_folder/node_modules/bootstrap/scss/mixins/_grid.scss}.
