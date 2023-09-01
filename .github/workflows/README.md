@@ -4,7 +4,7 @@ After completing all the steps in the project, automatic tests will become avail
 
 The hexlet-check.yml file is responsible for running these tests - do not delete this file, edit it, or rename the repository.
 
-# webpack-package
+## webpack-package
 
 [![github action status](https://github.com/hexlet-boilerplates/webpack-package/workflows/Node%20CI/badge.svg)](https://github.com/hexlet-boilerplates/webpack-package/actions)
 [![Code Climate](https://codeclimate.com/github/hexlet-boilerplates/webpack-package/badges/gpa.svg)](https://codeclimate.com/github/hexlet-boilerplates/webpack-package)

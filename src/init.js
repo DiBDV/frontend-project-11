@@ -31,7 +31,8 @@ export default () => {
   
   // View
   const renderError = (state) => {
-    elements.feedback[0].innerHTML = 'Please use a valid RSS URL';
+    elements.feedback[0].innerHTML = 'Please use a valid URL';
+    elements.searchBar?.classList.add('border-danger');
   };
 
 
