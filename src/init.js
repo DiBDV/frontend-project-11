@@ -4,7 +4,7 @@ import Example from './Example.js';
 import onChange from 'on-change';
 import * as yup from 'yup';
 import i18n from 'i18next'
-import resources from './resources.js';
+import resources from './resources/index.js';
 
 export default () => {
   const elements = {
@@ -42,7 +42,7 @@ export default () => {
   
   // View
   const renderError = (state) => {
-    elements.feedback[0].innerHTML = resources.translation.error_message.ru;
+    elements.feedback[0].innerHTML = resources.ru.translation.error_message.ru;
     elements.searchBar?.classList.add('border-danger');
   };
 
