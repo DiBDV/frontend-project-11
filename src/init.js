@@ -3,6 +3,8 @@
 import Example from './Example.js';
 import onChange from 'on-change';
 import * as yup from 'yup';
+import i18n from 'i18next'
+import resources from './resources.js';
 
 export default () => {
   const elements = {
@@ -12,12 +14,21 @@ export default () => {
   }
 
   const intitalState = {
+    language: 'ru',
     form: {
       url: '',
-      state: 'filling',
+      state: 'filling'
     },
+    urls: []
   };
   
+  i18n
+  .init({
+    lng: intitalState.language,
+    fallbackLng: 'en',
+    debug: false,
+    resources
+  });
 
   // Model
   const state = onChange(intitalState, (path, value, previouValue) => {
@@ -31,7 +42,7 @@ export default () => {
   
   // View
   const renderError = (state) => {
-    elements.feedback[0].innerHTML = 'Please use a valid URL';
+    elements.feedback[0].innerHTML = resources.translation.error_message.ru;
     elements.searchBar?.classList.add('border-danger');
   };
 
@@ -70,6 +81,6 @@ export default () => {
           state.form.state = 'error'
           console.log(error.message);
         })
-
+      
   })
 };
