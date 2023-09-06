@@ -31,46 +31,45 @@ export default () => {
   });
 
   // Model
-  const state = onChange(intitalState, (path, value, previouValue) => {
-      console.log('stateChange', path, value, JSON.stringify(state));
-      if (path === 'form.state') {
-        renderError(state);
-          // render Error
-      }
+  const state = onChange(intitalState, (path, value, previousValue) => {
+    console.log('stateChange', path, value, JSON.stringify(state));
+    if (path === 'form.state') {
+      renderError(state);
+      // render Error
+    }
   })
- 
-  
+
+
   // View
   const renderError = (state) => {
     elements.feedback[0].innerHTML = resources.ru.translation.error_message.ru;
     elements.searchBar?.classList.add('border-danger');
   };
 
-
   // Controller
   elements.searchBar?.addEventListener('input', (e) => {
-      state.form.state = 'filling';
-      const urlValue = e.target?.value;
-      state.form.url = urlValue;
-      const urlSchema = yup.string().url(urlValue);
+    state.form.state = 'filling';
+    const urlValue = e.target?.value;
+    state.form.url = urlValue;
+    const urlSchema = yup.string().url(urlValue);
 
-      // @TODO Validate
+    // @TODO Validate
 
-      const validateUrl = (url) => {
-        return new Promise((resolve, reject) => {
-          urlSchema.isValid(url)
-            .then(valid => {
-              if (valid) {
-                resolve();
-              } else {
-                reject(new Error('Invalid URL'));
-              }
-            })
-            .catch(error => {
-              reject(error);
-            });
-        });
-      };
+    const validateUrl = (url) => {
+      return /** @type {Promise<void>} */(new Promise((resolve, reject) => {
+        urlSchema.isValid(url)
+          .then(valid => {
+            if (valid) {
+              resolve();
+            } else {
+              reject(new Error('Invalid URL'));
+            }
+          })
+          .catch(error => {
+            reject(error);
+          });
+      }));
+    };
 
       validateUrl(urlValue)
         .then(() => {
