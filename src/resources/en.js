@@ -1,16 +1,26 @@
 export default {
 	translation: {
-		button: {
-			en: 'Add',
-			ru: 'Добавить'
+		add: {
+			en: 'Add'
 		},
-		error_message: {
-			en: 'Please use a valid URL',
-			ru: 'Ссылка должна быть валидным URL',
+		errors: {
+			invalidUrl: 'Please use a valid URL',
+			duplicateUrl: 'URL already present',
 		},
 		changeLanguage: {
-			en: 'EN',
-			ru: 'RU'
+			en: 'EN'
+		},
+		titel: {
+			en: 'RSS aggregator',
+		},
+		titelDescription: {
+			en: "Start reading RSS today! It's simply beautiful",
+		},
+		searchbarPlaceholder: {
+			en: 'RSS link',
+		},
+		linkExample: {
+			en: 'Example: https://ru.hexlet.io/lessons.rss'
 		}
 	}
 }

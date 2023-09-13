@@ -17,18 +17,19 @@ export default () => {
     language: 'ru',
     form: {
       url: '',
-      state: 'filling'
+      state: 'filling',
+      error: ''
     },
     urls: []
   };
-  
+
   i18n
-  .init({
-    lng: intitalState.language,
-    fallbackLng: 'en',
-    debug: false,
-    resources
-  });
+    .init({
+      lng: intitalState.language,
+      fallbackLng: 'en',
+      debug: false,
+      resources
+    });
 
   // Model
   const state = onChange(intitalState, (path, value, previousValue) => {
@@ -42,44 +43,65 @@ export default () => {
 
   // View
   const renderError = (state) => {
-    elements.feedback[0].innerHTML = resources.ru.translation.error_message.ru;
+    elements.feedback[0].innerHTML = i18n.t(state.form.error);
     elements.searchBar?.classList.add('border-danger');
   };
 
   // Controller
   elements.searchBar?.addEventListener('input', (e) => {
     state.form.state = 'filling';
+    state.form.error = '';
     const urlValue = e.target?.value;
     state.form.url = urlValue;
     const urlSchema = yup.string().url(urlValue);
-
-    // @TODO Validate
+    const urlDuplicate = yup.string().notOneOf(state.urls);
 
     const validateUrl = (url) => {
       return /** @type {Promise<void>} */(new Promise((resolve, reject) => {
+        urlDuplicate.isValid(url)
+          .then(valid => {
+            if (valid) {
+              resolve();
+            } else {
+              reject(new Error('URL already present'));
+              state.form.error = i18n.t('errors.duplicateUrl');
+            }
+          })
+          .catch(error => {
+            reject(error);
+          })
         urlSchema.isValid(url)
           .then(valid => {
             if (valid) {
               resolve();
             } else {
               reject(new Error('Invalid URL'));
+              state.form.error = i18n.t('errors.invalidUrl');
             }
           })
           .catch(error => {
             reject(error);
           });
+
       }));
     };
 
-      validateUrl(urlValue)
-        .then(() => {
-          state.form.state = 'valid';
-          console.log('URL is valid', urlValue);
-        })
-        .catch(error => {
-          state.form.state = 'error'
-          console.log(error.message);
-        })
-      
+    validateUrl(urlValue)
+      .then(() => {
+        state.form.state = 'valid';
+        state.urls.push(urlValue);
+        console.log('URL is valid', urlValue);
+      })
+      .catch(error => {
+        state.form.state = 'error'
+        console.log(error.message);
+      })
+
   })
 };
+
+
+/*
+to do
+
+*/
