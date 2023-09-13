@@ -1,5 +1,6 @@
 // @ts-check
 
+// @ts-ignore
 import Example from './Example.js';
 import onChange from 'on-change';
 import * as yup from 'yup';
@@ -32,6 +33,7 @@ export default () => {
     });
 
   // Model
+  // @ts-ignore
   const state = onChange(intitalState, (path, value, previousValue) => {
     console.log('stateChange', path, value, JSON.stringify(state));
     if (path === 'form.state') {
@@ -51,6 +53,7 @@ export default () => {
   elements.searchBar?.addEventListener('input', (e) => {
     state.form.state = 'filling';
     state.form.error = '';
+    // @ts-ignore
     const urlValue = e.target?.value;
     state.form.url = urlValue;
     const urlSchema = yup.string().url(urlValue);
@@ -89,6 +92,7 @@ export default () => {
     validateUrl(urlValue)
       .then(() => {
         state.form.state = 'valid';
+        // @ts-ignore
         state.urls.push(urlValue);
         console.log('URL is valid', urlValue);
       })
