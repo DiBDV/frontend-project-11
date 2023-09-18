@@ -1,26 +1,14 @@
 export default {
 	translation: {
-		add: {
-			en: 'Add'
-		},
+		add: 'Add',
 		errors: {
 			invalidUrl: 'Please use a valid URL',
 			duplicateUrl: 'URL already present',
 		},
-		changeLanguage: {
-			en: 'EN'
-		},
-		titel: {
-			en: 'RSS aggregator',
-		},
-		titelDescription: {
-			en: "Start reading RSS today! It's simply beautiful",
-		},
-		searchbarPlaceholder: {
-			en: 'RSS link',
-		},
-		linkExample: {
-			en: 'Example: https://ru.hexlet.io/lessons.rss'
-		}
+		changeLanguage: 'EN',
+		titel:  'RSS aggregator',
+		titelDescription: "Start reading RSS today! It's simply beautiful",
+		searchbarPlaceholder: 'RSS link',
+		linkExample: 'Example: https://ru.hexlet.io/lessons.rss',
 	}
 }
