@@ -6,10 +6,26 @@ import onChange from 'on-change';
 import * as yup from 'yup';
 import i18n from 'i18next'
 import resources from './resources/index.js';
+import axios from 'axios';
 
 const validate = (value, urls) => {
   const schema = yup.string().url().required().notOneOf(urls);
   return schema.validate(value)
+}
+
+const getRssFeed = (url, feeds) => {
+  axios.get(url)
+  .then(function (response) {
+    console.log("rssResponce",response);
+  })
+  .catch(function (error) {
+    console.log(error);
+  })
+}
+
+const parseRssLink = (url) => {
+  const parsedUrl = DOMParser(url);
+  console.log("parsedURL", parsedUrl);
 }
 
 export default () => {
@@ -17,10 +33,10 @@ export default () => {
     searchBar: document.getElementById('url-input'),
     buttonAdd: document.getElementsByClassName('btn-primary'),
     feedback: document.getElementsByClassName('feedback'),
-    pageTitel: document.getElementsByClassName('display-3'),
-    pageSubtitel: document.getElementsByClassName('lead'),
     searchbarPlaceholder: document.getElementById('url-input'),
     linkExample: document.getElementsByClassName('mt-2'),
+    posts: document.getElementsByClassName('posts'),
+    feeds:document.getElementsByClassName('feeds'),
   }
 
   const intitalState = {
@@ -30,7 +46,19 @@ export default () => {
       state: 'filling',
       error: '',
     },
-    urls: []
+    urls: [],
+    posts: {
+      title: '',
+      link: ''
+    },
+    feeds: {
+      title: '',
+      description: ''
+    },
+    modal: {
+      title: '',
+      content: ''
+    }
   };
 
   i18n
@@ -65,7 +93,6 @@ export default () => {
   };
 
 
-  // is this correct approach??????
   const renderPage = (state) => {
     elements.buttonAdd[0].innerHTML = i18n.t('add')
   }
@@ -88,6 +115,16 @@ export default () => {
       .catch((e) => {
         state.form.error = e.message;
         state.form.state = 'error';
+      })
+
+    getRssFeed(urlValue, state.feeds)
+      .then( () => {
+        state.feeds.push(urlValue);
+      })
+
+    parseRssLink(urlValue)
+      .then( () => {
+        state.posts.push(urlValue);
       })
 
     // state.form.url = urlValue;
@@ -136,6 +173,8 @@ export default () => {
   //       console.log(error.message);
   //     })
 
+
+
   })
 };
 
@@ -143,4 +182,7 @@ export default () => {
 /*
 ? why error not generated immediately once I start typing
 - on submit
+- test link for rss 
+   https://lorem-rss.hexlet.app/feed?unit=second&interval=30
+- 
 */
