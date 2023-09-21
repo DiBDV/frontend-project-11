@@ -13,19 +13,21 @@ const validate = (value, urls) => {
   return schema.validate(value)
 }
 
-const getRssFeed = (url, feeds) => {
-  axios.get(url)
-  .then(function (response) {
-    console.log("rssResponce",response);
-  })
-  .catch(function (error) {
-    console.log(error);
-  })
+const getRssFeed = (url) => {
+  axios.get(`https://allorigins.hexlet.app/get?url=${encodeURIComponent(url)}`)
+    .then((response) => {
+      console.log("rssResponce", response);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
 }
 
-const parseRssLink = (url) => {
-  const parsedUrl = DOMParser(url);
-  console.log("parsedURL", parsedUrl);
+const parseRssLink = (value) => {
+  const parser = new DOMParser();
+  const parsedFeed = parser.parseFromString(value, "text/html");
+  console.log("parsedFeed", parsedFeed);
+  return parsedFeed;
 }
 
 export default () => {
@@ -36,7 +38,7 @@ export default () => {
     searchbarPlaceholder: document.getElementById('url-input'),
     linkExample: document.getElementsByClassName('mt-2'),
     posts: document.getElementsByClassName('posts'),
-    feeds:document.getElementsByClassName('feeds'),
+    feeds: document.getElementsByClassName('feeds'),
   }
 
   const intitalState = {
@@ -94,11 +96,16 @@ export default () => {
 
 
   const renderPage = (state) => {
-    elements.buttonAdd[0].innerHTML = i18n.t('add')
+    // elements.buttonAdd[0].innerHTML = i18n.t('add')
+    const postsContainer = document.createElement('div');
+    const postsHeader = document.createElement('h2');
+    postsContainer.innerText = i18n.t('postsHeader')
+    posts.appendChild(postsContainer);
+    postsContainer.appendChild(postsHeader);
   }
 
   // Controller
-  elements.searchBar?.addEventListener('input', (e) => {
+  elements.searchBar?.addEventListener('submit', (e) => {
     e.preventDefault();
 
     state.form.error = '';
@@ -118,60 +125,66 @@ export default () => {
       })
 
     getRssFeed(urlValue, state.feeds)
-      .then( () => {
+      .then(() => {
         state.feeds.push(urlValue);
+      })
+      .catch((e) => {
+        state.form.error = e.message;
+        state.form.state = 'error'
       })
 
     parseRssLink(urlValue)
-      .then( () => {
+      .then(() => {
         state.posts.push(urlValue);
       })
+    
+    renderPage(urlValue);
 
     // state.form.url = urlValue;
     // const urlSchema = yup.string().url(urlValue);
     // const urlDuplicate = yup.string().notOneOf(state.urls);
 
-  //   const validateUrl = (url) => {
-  //     return /** @type {Promise<void>} */(new Promise((resolve, reject) => {
-  //       urlDuplicate.isValid(url)
-  //         .then(valid => {
-  //           if (valid) {
-  //             resolve();
-  //           } else {
-  //             reject(new Error('URL already present'));
-  //             state.form.error = i18n.t('errors.duplicateUrl');
-  //           }
-  //         })
-  //         .catch(error => {
-  //           reject(error);
-  //         })
-  //       urlSchema.isValid(url)
-  //         .then(valid => {
-  //           if (valid) {
-  //             resolve();
-  //           } else {
-  //             reject(new Error('Invalid URL'));
-  //             state.form.error = i18n.t('errors.invalidUrl');
-  //           }
-  //         })
-  //         .catch(error => {
-  //           reject(error);
-  //         });
+    //   const validateUrl = (url) => {
+    //     return /** @type {Promise<void>} */(new Promise((resolve, reject) => {
+    //       urlDuplicate.isValid(url)
+    //         .then(valid => {
+    //           if (valid) {
+    //             resolve();
+    //           } else {
+    //             reject(new Error('URL already present'));
+    //             state.form.error = i18n.t('errors.duplicateUrl');
+    //           }
+    //         })
+    //         .catch(error => {
+    //           reject(error);
+    //         })
+    //       urlSchema.isValid(url)
+    //         .then(valid => {
+    //           if (valid) {
+    //             resolve();
+    //           } else {
+    //             reject(new Error('Invalid URL'));
+    //             state.form.error = i18n.t('errors.invalidUrl');
+    //           }
+    //         })
+    //         .catch(error => {
+    //           reject(error);
+    //         });
 
-  //     }));
-  //   };
+    //     }));
+    //   };
 
-  //   validateUrl(urlValue)
-  //     .then(() => {
-  //       state.form.state = 'valid';
-  //       // @ts-ignore
-  //       state.urls.push(urlValue);
-  //       console.log('URL is valid', urlValue);
-  //     })
-  //     .catch(error => {
-  //       state.form.state = 'error'
-  //       console.log(error.message);
-  //     })
+    //   validateUrl(urlValue)
+    //     .then(() => {
+    //       state.form.state = 'valid';
+    //       // @ts-ignore
+    //       state.urls.push(urlValue);
+    //       console.log('URL is valid', urlValue);
+    //     })
+    //     .catch(error => {
+    //       state.form.state = 'error'
+    //       console.log(error.message);
+    //     })
 
 
 
@@ -182,7 +195,12 @@ export default () => {
 /*
 ? why error not generated immediately once I start typing
 - on submit
-- test link for rss 
+- test links for rss 
    https://lorem-rss.hexlet.app/feed?unit=second&interval=30
+   http://rss.cnn.com/rss/cnn_topstories.rss
+   https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml
+   https://rss.nytimes.com/services/xml/rss/nyt/Science.xml
+   https://lifehacker.com/rss
+
 - 
 */
