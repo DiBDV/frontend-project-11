@@ -29,13 +29,12 @@ const parseRssLink = (xmlString) => {
   console.log("xmlDocument", xmlDocument);
 
   const feedTitle = xmlDocument.querySelector("title").textContent;
-  const description = xmlDocument.querySelector("description").textContent;
-
+  const feedDescription = xmlDocument.querySelector("description").textContent;
   console.log("feedTitle", feedTitle);
-  console.log("description", description);
-
+  console.log("description", feedDescription);
 
   const items = [];
+
   for (const item of xmlItems) {
     const title = item.querySelector("title").textContent;
     console.log("title", title);
@@ -43,11 +42,11 @@ const parseRssLink = (xmlString) => {
     console.log("link", link);
     const description = item.querySelector("description").textContent;
     console.log("description", description);
-    items.push({title, link, description})
+    items.push({ title, link, description })
   };
 
   return {
-    feedTitle, description,
+    feedTitle, feedDescription,
     items,
   }
 }
@@ -55,12 +54,12 @@ const parseRssLink = (xmlString) => {
 export default () => {
   const elements = {
     searchBar: document.getElementById('url-input'),
-    buttonAdd: document.getElementsByClassName('btn-primary'),
-    feedback: document.getElementsByClassName('feedback'),
-    searchbarPlaceholder: document.getElementById('url-input'),
-    linkExample: document.getElementsByClassName('mt-2'),
-    posts: document.querySelector('.posts'),
-    feeds: document.getElementsByClassName('feeds'),
+    buttonAdd: document.getElementById('btn-add'),
+    feedback: document.getElementById('feedback'),
+    searchbarPlaceholder: document.getElementById('input'),
+    linkExample: document.getElementById('example'),
+    posts: document.getElementById('posts'),
+    feeds: document.getElementById('feeds'),
   }
 
   const intitalState = {
@@ -112,7 +111,6 @@ export default () => {
     if (path === 'posts') {
       renderPosts(state);
     }
-    renderPosts(state);
   })
 
   // View
@@ -120,7 +118,7 @@ export default () => {
     elements.feedback[0].innerHTML = i18n.t(state.form.error);
     elements.searchBar?.classList.add('border-danger');
   };
-  
+
   const renderPosts = (state) => {
     const fragment = new DocumentFragment();
     const postsContainer = document.createElement('div');
@@ -129,6 +127,15 @@ export default () => {
     postsContainer.appendChild(postsHeader);
     elements.posts.innerHTML = '';
     elements.posts.appendChild(postsContainer);
+  }
+
+  const renderFeeds = (state) => {
+    const fragment = new DocumentFragment();
+    const feedsContainer = document.createElement('div');
+    const feedsHeader = document.createElement('h2');
+    feedsContainer.innerText = i18n.t('feedsHeader');
+    elements.feeds.innerHTML = '';
+    elements.feeds.appendChild(feedsContainer);
   }
 
   // Controller
@@ -150,8 +157,8 @@ export default () => {
           .then(parseRssLink)
           .then((data) => {
             console.log("data", data)
-            state.feeds.push({ title: data.title, url: urlValue })
-            state.posts.push(data.items)
+            state.feeds.push({ title: data.title, url: urlValue });
+            state.posts.push(data.items);
           })
           .catch((e) => {
             state.form.error = e.message;
@@ -164,7 +171,7 @@ export default () => {
         state.form.state = 'error';
       })
 
-  
+
 
     // parseRssLink(urlValue)
     //   .then(() => {
