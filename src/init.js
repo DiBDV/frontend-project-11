@@ -1,5 +1,4 @@
 // @ts-nocheck
-
 // @ts-ignore
 import Example from './Example.js';
 import onChange from 'on-change';
@@ -14,20 +13,43 @@ const validate = (value, urls) => {
 }
 
 const getRssFeed = (url) => {
-  axios.get(`https://allorigins.hexlet.app/get?url=${encodeURIComponent(url)}`)
+  return axios.get(`https://allorigins.hexlet.app/get?url=${encodeURIComponent(url)}`)
     .then((response) => {
-      console.log("rssResponce", response);
+      return response.data.contents;
     })
     .catch((error) => {
       console.log(error);
+      throw error;
     })
 }
 
-const parseRssLink = (value) => {
-  const parser = new DOMParser();
-  const parsedFeed = parser.parseFromString(value, "text/html");
-  console.log("parsedFeed", parsedFeed);
-  return parsedFeed;
+const parseRssLink = (xmlString) => {
+  const xmlDocument = new DOMParser().parseFromString(xmlString, "text/xml");
+  const xmlItems = xmlDocument.querySelectorAll("item");
+  console.log("xmlDocument", xmlDocument);
+
+  const feedTitle = xmlDocument.querySelector("title").textContent;
+  const description = xmlDocument.querySelector("description").textContent;
+
+  console.log("feedTitle", feedTitle);
+  console.log("description", description);
+
+
+  const items = [];
+  for (const item of xmlItems) {
+    const title = item.querySelector("title").textContent;
+    console.log("title", title);
+    const link = item.querySelector("link").textContent;
+    console.log("link", link);
+    const description = item.querySelector("description").textContent;
+    console.log("description", description);
+    items.push({title, link, description})
+  };
+
+  return {
+    feedTitle, description,
+    items,
+  }
 }
 
 export default () => {
@@ -37,7 +59,7 @@ export default () => {
     feedback: document.getElementsByClassName('feedback'),
     searchbarPlaceholder: document.getElementById('url-input'),
     linkExample: document.getElementsByClassName('mt-2'),
-    posts: document.getElementsByClassName('posts'),
+    posts: document.querySelector('.posts'),
     feeds: document.getElementsByClassName('feeds'),
   }
 
@@ -83,29 +105,34 @@ export default () => {
     console.log('stateChange', path, value, JSON.stringify(state));
     if (path === 'form.state') {
       renderError(state);
-      // render Error
     }
+    if (path === 'feeds') {
+      renderFeeds(state); // 
+    }
+    if (path === 'posts') {
+      renderPosts(state);
+    }
+    renderPosts(state);
   })
-
 
   // View
   const renderError = (state) => {
     elements.feedback[0].innerHTML = i18n.t(state.form.error);
     elements.searchBar?.classList.add('border-danger');
   };
-
-
-  const renderPage = (state) => {
-    // elements.buttonAdd[0].innerHTML = i18n.t('add')
+  
+  const renderPosts = (state) => {
+    const fragment = new DocumentFragment();
     const postsContainer = document.createElement('div');
     const postsHeader = document.createElement('h2');
-    postsContainer.innerText = i18n.t('postsHeader')
-    posts.appendChild(postsContainer);
+    postsContainer.innerText = i18n.t('postsHeader');
     postsContainer.appendChild(postsHeader);
+    elements.posts.innerHTML = '';
+    elements.posts.appendChild(postsContainer);
   }
 
   // Controller
-  elements.searchBar?.addEventListener('submit', (e) => {
+  elements.searchBar?.addEventListener('input', (e) => {
     e.preventDefault();
 
     state.form.error = '';
@@ -118,83 +145,38 @@ export default () => {
         state.urls.push(urlValue);
         state.form.url = urlValue;
         state.form.state = 'valid';
+
+        getRssFeed(urlValue)
+          .then(parseRssLink)
+          .then((data) => {
+            console.log("data", data)
+            state.feeds.push({ title: data.title, url: urlValue })
+            state.posts.push(data.items)
+          })
+          .catch((e) => {
+            state.form.error = e.message;
+            state.form.state = 'error'
+          })
+
       })
       .catch((e) => {
         state.form.error = e.message;
         state.form.state = 'error';
       })
 
-    getRssFeed(urlValue, state.feeds)
-      .then(() => {
-        state.feeds.push(urlValue);
-      })
-      .catch((e) => {
-        state.form.error = e.message;
-        state.form.state = 'error'
-      })
+  
 
-    parseRssLink(urlValue)
-      .then(() => {
-        state.posts.push(urlValue);
-      })
-    
-    renderPage(urlValue);
-
-    // state.form.url = urlValue;
-    // const urlSchema = yup.string().url(urlValue);
-    // const urlDuplicate = yup.string().notOneOf(state.urls);
-
-    //   const validateUrl = (url) => {
-    //     return /** @type {Promise<void>} */(new Promise((resolve, reject) => {
-    //       urlDuplicate.isValid(url)
-    //         .then(valid => {
-    //           if (valid) {
-    //             resolve();
-    //           } else {
-    //             reject(new Error('URL already present'));
-    //             state.form.error = i18n.t('errors.duplicateUrl');
-    //           }
-    //         })
-    //         .catch(error => {
-    //           reject(error);
-    //         })
-    //       urlSchema.isValid(url)
-    //         .then(valid => {
-    //           if (valid) {
-    //             resolve();
-    //           } else {
-    //             reject(new Error('Invalid URL'));
-    //             state.form.error = i18n.t('errors.invalidUrl');
-    //           }
-    //         })
-    //         .catch(error => {
-    //           reject(error);
-    //         });
-
-    //     }));
-    //   };
-
-    //   validateUrl(urlValue)
-    //     .then(() => {
-    //       state.form.state = 'valid';
-    //       // @ts-ignore
-    //       state.urls.push(urlValue);
-    //       console.log('URL is valid', urlValue);
-    //     })
-    //     .catch(error => {
-    //       state.form.state = 'error'
-    //       console.log(error.message);
-    //     })
-
-
-
+    // parseRssLink(urlValue)
+    //   .then(() => {
+    //     state.posts.push(urlValue);
+    //   })
   })
 };
 
 
 /*
 ? why error not generated immediately once I start typing
-- on submit
+- on submit or input
 - test links for rss 
    https://lorem-rss.hexlet.app/feed?unit=second&interval=30
    http://rss.cnn.com/rss/cnn_topstories.rss
