@@ -182,21 +182,21 @@ export default () => {
     const listGroup = document.createElement('ul');
     listGroup.className = 'list-group border-0 rounded-0';
 
-      const listItem = document.createElement('li');
-      listItem.className = 'list-group-item border-0 border-end-0';
-      const listItemTitle = document.createElement('h3');
-      listItemTitle.className = 'h6 m-0';
-      listItemTitle.textContent = state.feeds.feedTitle;
-      const listItemDescription = document.createElement('p');
-      listItemDescription.className = 'm-0 small text-black-50';
-      listItemDescription.textContent = state.feeds.feedDescription;
+    const listItem = document.createElement('li');
+    listItem.className = 'list-group-item border-0 border-end-0';
+    const listItemTitle = document.createElement('h3');
+    listItemTitle.className = 'h6 m-0';
+    listItemTitle.textContent = state.feeds.feedTitle;
+    const listItemDescription = document.createElement('p');
+    listItemDescription.className = 'm-0 small text-black-50';
+    listItemDescription.textContent = state.feeds.feedDescription;
 
-      listItem.appendChild(listItemTitle);
-      listItem.appendChild(listItemDescription);
-      listGroup.appendChild(listItem);
-      feedsContainer.appendChild(feedsContainerBody);
-      feedsContainer.appendChild(listGroup);
-      elements.feeds.appendChild(feedsContainer);
+    listItem.appendChild(listItemTitle);
+    listItem.appendChild(listItemDescription);
+    listGroup.appendChild(listItem);
+    feedsContainer.appendChild(feedsContainerBody);
+    feedsContainer.appendChild(listGroup);
+    elements.feeds.appendChild(feedsContainer);
   }
 
   // Controller
