@@ -12,6 +12,8 @@ export default {
 		linkExample: 'Пример: https://ru.hexlet.io/lessons.rss',
 		postsHeader: 'Посты',
 		feedsHeader: 'Фиды',
-		postsPreview: 'Просмотр'
+		postsPreview: 'Просмотр',
+		readFullArtikle: 'Читать полностью',
+		buttonClose: 'Закрыть',
 	}
 }
