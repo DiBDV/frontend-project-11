@@ -14,7 +14,7 @@ const validate = (value, urls) => {
 }
 
 const getRssFeed = (url) => {
-    return axios.get(`https://allorigins.hexlet.app/get?url=${encodeURIComponent(url)}`)
+  return axios.get(`https://allorigins.hexlet.app/get?url=${encodeURIComponent(url)}`)
     .then((response) => {
       // console.log("response.data.contents", response.data.contents)
       return response.data.contents;
@@ -243,11 +243,8 @@ export default () => {
     const modal = new Modal(elements.modal);
     const modalContainer = buildModalContainer();
 
-
+    modal.show();
   };
-
-  console.log('posts_before', elements.posts);
-  console.log('modal_before', elements.modal);
 
   // Controller
   elements.rssForm?.addEventListener('submit', (e) => {
@@ -292,14 +289,9 @@ export default () => {
 
   elements.posts?.addEventListener('click', (click) => {
     click.preventDefault;
-
     rederModal();
-    // let myModal = new bootstrap.Modal(elements.modal);
-    // myModal.show();
   })
-  
-  console.log('posts_after', elements.posts);
-  console.log('modal_after', elements.modal);
+
 
 };
 
