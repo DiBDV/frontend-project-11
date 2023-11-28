@@ -7,6 +7,7 @@ import i18n from 'i18next'
 import resources from './resources/index.js';
 import axios from 'axios';
 import { Modal } from 'bootstrap';
+import _ from 'lodash';
 
 const validate = (value, urls) => {
   const schema = yup.string().url().required().notOneOf(urls);
@@ -78,14 +79,10 @@ export default () => {
     urls: [],
     posts: [],
     feeds: [],
-    modal: {
-      title: '',
-      content: ''
-    }
+/* remove modal state, make sure the button ID is created to each post and assigned 
+to the preview button.
+*/
   };
-
-  // console.log("state.feeds.titel", state.feeds.titel );
-  // console.log("state.feeds.description",state.feeds.description );
 
   i18n
     .init({
@@ -142,23 +139,25 @@ export default () => {
     const listItemData = state.posts;
 
     listItemData.forEach((itemData, index) => {
+      console.log("itemData", itemData);
       const listItem = document.createElement('li');
       listItem.className = 'list-group-item d-flex justify-content-between align-items-start border-0 border-end-0';
-
+      
       const listItemLink = document.createElement('a');
       listItemLink.href = itemData.link;
-      listItemLink.className = 'fw-bold';
-      const textBoldToNormal = document
-      // listItemLink.className = index % 2 === 0 ? 'fw-normal link-secondary' : 'fw-bold';
+      listItemLink.className = 'fw-bold postTitle';
       listItemLink.textContent = itemData.title;
       listItemLink.target = '_blank';
       listItemLink.rel = 'noopener noreferrer';
+      listItemLink.setAttribute('data-id', itemData.id);
 
       const listItemButton = document.createElement('button');
       listItemButton.type = 'button';
       listItemButton.className = 'btn btn-outline-primary btn-sm';
+      // listItemButton.className.add = state.posts.ar
       listItemButton.id = 'showModalBtn';
       listItemButton.textContent = i18n.t('postsPreview');
+      listItemButton.setAttribute('data-id', itemData.id)
 
       listItem.appendChild(listItemLink);
       listItem.appendChild(listItemButton);
@@ -170,6 +169,7 @@ export default () => {
     elements.posts.appendChild(postsContainer);
 
   }
+  console.log("state.posts.title", state.posts.title );
 
   const buildFeedContainer = () => {
     const feedsContainer = document.createElement('div');
@@ -214,34 +214,36 @@ export default () => {
 
   }
 
-  const buildModalContainer = () => {
-    const modalContent = document.createElement("div");
-    modalContent.className = "modal-content";
+  // const buildModalContainer = () => {
+  //   const modalContent = document.createElement("div");
+  //   modalContent.className = "modal-content";
 
-    const modalHeader = document.createElement("div");
-    modalHeader.className = "modal-header";
+  //   const modalHeader = document.createElement("div");
+  //   modalHeader.className = "modal-header";
 
-    const modalTitle = document.createElement("h5");
-    modalTitle.className = "modal-title";
-    // ? how to assing the value of the POSTS to the modal title ?
-    // modalTitle.textContent = elements.posts.childNodes.listItemTitle.innerText;
+  //   const modalTitle = document.createElement("h5");
+  //   modalTitle.className = "modal-title";
+  //   // ? how to assing the value of the POSTS to the modal title ?
+  //   // modalTitle.textContent = elements.posts.childNodes.listItemTitle.innerText;
 
-    const closeButton = document.createElement("button");
-    closeButton.type = "button";
-    closeButton.className = "btn-close close";
-    closeButton.setAttribute("data-bs-dismiss", "modal");
-    closeButton.setAttribute("aria-label", "Close");
+  //   const closeButton = document.createElement("button");
+  //   closeButton.type = "button";
+  //   closeButton.className = "btn-close close";
+  //   closeButton.setAttribute("data-bs-dismiss", "modal");
+  //   closeButton.setAttribute("aria-label", "Close");
 
-    modalHeader.appendChild(modalTitle);
-    modalHeader.appendChild(closeButton);
+  //   modalHeader.appendChild(modalTitle);
+  //   modalHeader.appendChild(closeButton);
 
-    const modalBody = document.createElement("div");
-    modalBody.className = "modal-body text-break";
-  };
+  //   const modalBody = document.createElement("div");
+  //   modalBody.className = "modal-body text-break";
+  // };
 
-  const rederModal = () => {
+  const renderModal = (state) => {
     const modal = new Modal(elements.modal);
-    const modalContainer = buildModalContainer();
+
+    elements.modal.querySelector('.modal-title').textContent = state.posts.title;
+    elements.modal.querySelector('.modal-body').textContent = state.posts.body;
 
     modal.show();
   };
@@ -272,7 +274,10 @@ export default () => {
             // console.log('data.feedDescription', data.feedDescription);
 
             state.feeds.push({ title: data.title, description: data.description, link: urlValue })
-            state.posts.push(...data.items);
+            // console.log("...data.items", ...data.items);
+            // console.log("...data.items.map(item => ({...item, id: _.unieqId() })", ...data.items.map(item => ({...item, id: _.unieqId() })));
+            state.posts.push(...data.items.map(item => ({...item, id: _.uniqueId() })));
+            
           })
           .catch((e) => {
             state.form.error = e.message;
@@ -287,11 +292,25 @@ export default () => {
     e.value = "";
   })
 
+  console.log("state.posts", state.posts);
+  
   elements.posts?.addEventListener('click', (click) => {
     click.preventDefault;
-    rederModal();
+
+    const postTitle = document.querySelector('.postTitle')
+    console.log("postTitle", postTitle);
+    postTitle.classList.remove('fw-bold');
+    postTitle.classList.add('fw-normal');
   })
 
+  elements.posts?.addEventListener('click', (click) => {
+    click.preventDefault;
+
+    // state.modal.title = "MODAL title";
+    // state.modal.body = "MODAL content";
+
+    renderModal(state);
+  })  
 
 };
 
