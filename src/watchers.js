@@ -1,5 +1,5 @@
 // @ts-check
 
-export default elements  = (elemnt) => {
+export default elements  = (element) => {
 
 }
