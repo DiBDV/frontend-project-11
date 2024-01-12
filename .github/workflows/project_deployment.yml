@@ -3,8 +3,19 @@ name: project_deploy
 
 # Trigger the workflow on push or pull request
 on:
-  - push
-  - pull_request
+  push:
+      branches:
+        - main
+  pull_request:
+      branches:
+        - main
+  workflow_dispatch:
+    inputs:
+      # Allow the user to select the branch to run on
+      branch:
+        description: 'Project deployment on MAIN branch'
+        required: true
+        default: 'main'
 
 env:
   CI: true
