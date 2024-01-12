@@ -1,16 +1,19 @@
 export default {
 	translation: {
-		button: {
-			ru: 'Добавить',
-			en: 'Add'
+		add: 'Добавить',
+		errors: {
+			invalidUrl: 'Ссылка должна быть валидным URL',
+			duplicateUrl: 'URL уже добавлен',
 		},
-		error_message: {
-			ru: 'Ссылка должна быть валидным URL',
-			en: 'Please use a valid URL',
-		},
-		changeLanguage: {
-			en: 'EN',
-			ru: 'RU'
-		}
+		changeLanguage: 'RU',
+		titel: 'RSS аггрегатор',
+		titelDescription: 'Начните читать RSS сегодня! Это легко, это красиво.',
+		searchbarPlaceholder: 'Ссылка RSS',
+		linkExample: 'Пример: https://ru.hexlet.io/lessons.rss',
+		postsHeader: 'Посты',
+		feedsHeader: 'Фиды',
+		postsPreview: 'Просмотр',
+		readFullArtikle: 'Читать полностью',
+		buttonClose: 'Закрыть',
 	}
 }

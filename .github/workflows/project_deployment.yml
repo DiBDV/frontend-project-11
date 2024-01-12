@@ -3,8 +3,19 @@ name: project_deploy
 
 # Trigger the workflow on push or pull request
 on:
-  - push
-  - pull_request
+  push:
+      branches:
+        - main
+  pull_request:
+      branches:
+        - main
+  workflow_dispatch:
+    inputs:
+      # Allow the user to select the branch to run on
+      branch:
+        description: 'Project deployment on MAIN branch'
+        required: true
+        default: 'main'
 
 env:
   CI: true
@@ -16,7 +27,7 @@ jobs:
     strategy:
       # Node version list
       matrix:
-        node-version: [16.x, 17.x, 18.x]
+        node-version: [18.x]
 
     steps:
       # Check-out repository under GitHub workspace
